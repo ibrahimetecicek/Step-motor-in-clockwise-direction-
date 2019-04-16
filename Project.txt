@@ -1,0 +1,52 @@
+CNT3  		EQU    	0FFFFH
+BPORT3	EQU     0FFFBH
+				 
+CODE		SEGMENT
+		ASSUME	CS:CODE, DS:CODE				 
+
+		ORG	0				 
+				 
+START:		MOV	SP,4000H
+		MOV	AL,90H
+		MOV	DX,CNT3
+		OUT	DX,AL
+
+MAIN:		MOV AH,20		;3 Saniye bekleme için 20 Döngü gerçekleþiyor.
+
+J0:		MOV AL,1EH		;Port Çýkýsý 0001 1110 Yapýlýyor
+		CALL OUTPUT		;Port Çýkýþý Setleniyor ve delay saðlanýyor	
+		MOV AL,2DH		;Port Çýkýsý 0010 1101 Yapýlýyor		
+		CALL OUTPUT		;Port Çýkýþý Setleniyor ve delay saðlanýyor	
+		MOV AL,4BH		;Port Çýkýsý 0100 1011 Yapýlýyor
+		CALL OUTPUT		;Port Çýkýþý Setleniyor ve delay saðlanýyor	
+		MOV AL,87H		;Port Çýkýsý 1000 0111 Yapýlýyor
+		CALL OUTPUT		;Port Çýkýþý Setleniyor ve delay saðlanýyor	
+		DEC AH
+		JNZ J0
+
+		MOV AH,40		;6 Saniye bekleme için 40 Döngü gerçekleþiyor.
+
+J1:		MOV AL,87H		;Port Çýkýsý 1000 0111 Yapýlýyor
+		CALL OUTPUT		;Port Çýkýþý Setleniyor ve delay saðlanýyor	
+		MOV AL,4BH		;Port Çýkýsý 0100 1011 Yapýlýyor
+		CALL OUTPUT		;Port Çýkýþý Setleniyor ve delay saðlanýyor	
+		MOV AL,2DH		;Port Çýkýsý 0010 1101 Yapýlýyor
+		CALL OUTPUT		;Port Çýkýþý Setleniyor ve delay saðlanýyor	
+		MOV AL,1EH		;Port Çýkýsý 0001 1110 Yapýlýyor
+		CALL OUTPUT		;Port Çýkýþý Setleniyor ve delay saðlanýyor	
+		DEC AH
+		JNZ J1
+
+		JMP MAIN
+
+OUTPUT:	MOV DX,BPORT3	;Port Çýks Ýþlemi	
+		OUT DX,AL		;Port Çýks Ýþlemi	
+		MOV CX,1100H		;Delay Ýþlemi
+		LOOP $			;Delay Ýþlemi
+		RET			;Geri Dönüþ Return
+
+CODE		ENDS
+		END	START				 
+
+
+
